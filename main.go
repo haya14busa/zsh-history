@@ -11,9 +11,10 @@ import (
 )
 
 var (
-	append = flag.Bool("a", false, "Append to the history")
-	list   = flag.Bool("l", false, "Show all histories")
-	query  = flag.String("q", "", "Query string")
+	append  = flag.Bool("a", false, "Append to the history")
+	list    = flag.Bool("l", false, "Show all histories")
+	query   = flag.String("q", "", "Query string")
+	columns = flag.Bool("c", false, "Cols")
 )
 
 func main() {
@@ -58,6 +59,16 @@ func run() int {
 		}
 		for _, row := range rows {
 			fmt.Printf("%s\n", row.Command)
+		}
+	}
+
+	if *columns {
+		rows, err := history.Columns(flag.Args())
+		if err != nil {
+			return msg(err)
+		}
+		for _, row := range rows {
+			fmt.Printf("%s\n", row)
 		}
 	}
 

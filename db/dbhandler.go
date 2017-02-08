@@ -10,20 +10,13 @@ import (
 	"gopkg.in/gorp.v1"
 )
 
-const (
-	Table = "history"
+var (
+	DBPath  = os.Getenv("ZSH_HISTORY_FILE")
+	Table   = "history"
+	Columns = []string{
+		"id", "date", "dir", "command", "status", "host",
+	}
 )
-
-const (
-	ColumnID        = "id"
-	ColumnDateTime  = "date"
-	ColumnDirectory = "dir"
-	ColumnCommand   = "command"
-	ColumnStatus    = "status"
-	ColumnHostname  = "host"
-)
-
-var DBPath = os.Getenv("ZSH_HISTORY_FILE")
 
 var (
 	QueryList = fmt.Sprintf("select * from %s", Table)
@@ -76,6 +69,10 @@ func (db *DBHandler) Query(query string) (Records, error) {
 	var rs Records
 	_, err := db.dbMap.Select(&rs, query)
 	return rs, err
+}
+
+func (db *DBHandler) Columns(cols []string) (Records, error) {
+	return db.Query(fmt.Sprintf("select %s from history", cols[0]))
 }
 
 func (db *DBHandler) QueryList() (Records, error) {

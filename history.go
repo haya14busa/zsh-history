@@ -35,3 +35,7 @@ func (h *History) List() error {
 func (h *History) Query(query string) (db.Records, error) {
 	return h.dbHandler.Query(query)
 }
+
+func (h *History) Columns(cols []string) (db.Records, error) {
+	return h.dbHandler.Columns(cols)
+}
